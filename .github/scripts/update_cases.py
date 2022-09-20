@@ -1,14 +1,16 @@
-import urllib3
+#import urllib3
+from subprocess import run
 from lxml import etree, html
 import re
 from datetime import datetime
 import pandas as pd
 
-http = urllib3.PoolManager()
-request = http.request( "GET", "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html")
+#http = urllib3.PoolManager()
+#request = http.request( "GET", "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html")
 
-assert request.status == 200, f"Request was unsuccessful. Status {request.status} returned."
-parsed_data = html.fromstring( request.data )
+#assert request.status == 200, f"Request was unsuccessful. Status {request.status} returned."
+request = run( "curl -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'  https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html", shell=True, capture_output=True, text=True )
+parsed_data = html.fromstring( request.stdout )
 
 cases = parsed_data.xpath('//*[@id="content-secondary"]/div[2]/div[7]/table/tbody/tr[2]/td[2]/b')[0].text
 assert cases.isnumeric(), "Parsed string ('{cases}') is not numeric"
