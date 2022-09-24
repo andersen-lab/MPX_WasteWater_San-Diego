@@ -17,13 +17,13 @@ date,source,copies
 6/29/22,PointLoma,0
 7/5/22,PointLoma,0
 7/6/22,PointLoma,0
-7/10/22,PointLoma,1.14E-05
+7/10/22,PointLoma,0.0000114
 7/11/22,PointLoma,0
 7/12/22,PointLoma,0
 7/13/22,PointLoma,0
 7/17/22,PointLoma,0.000109218
-7/18/22,PointLoma,8.89E-05
-7/20/22,PointLoma,6.91E-05
+7/18/22,PointLoma,0.0000889
+7/20/22,PointLoma,0.0000691
 7/24/22,PointLoma,0.000117761
 7/25/22,PointLoma,0.000156022
 7/26/22,PointLoma,0.000247674
@@ -48,3 +48,7 @@ date,source,copies
 8/30/22,PointLoma,0.0000517
 8/31/22,PointLoma,0.0000358
 9/4/22,PointLoma,0
+9/6/22,PointLoma,0.0000231
+9/12/22,PointLoma,0.0000325
+9/13/22,PointLoma,0.0000335
+9/14/22,PointLoma,0.0000175
