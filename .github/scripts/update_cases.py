@@ -16,7 +16,7 @@ ts = TS()
 ts.loads( f"https:{db_source}" )
 dashboard = ts.getWorkbook()
 for i in dashboard.worksheets:
-    if i.name == "Cumulative Cases":
+    if i.name == 'Daily Update':
         cases = int( i.data.values[0][0] )
     elif i.name == "Text1":
         date = i.data.iloc[0,0]
