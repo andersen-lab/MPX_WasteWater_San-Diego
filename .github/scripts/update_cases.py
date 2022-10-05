@@ -1,27 +1,26 @@
-#import urllib3
-from subprocess import run
-from lxml import etree, html
-import re
+from tableauscraper import TableauScraper as TS
+import requests
+from bs4 import BeautifulSoup
+import urllib3
 from datetime import datetime
 import pandas as pd
 
-#http = urllib3.PoolManager()
-#request = http.request( "GET", "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html")
+init_url = "https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html"
+r = requests.get( init_url )
+soup = BeautifulSoup( r.text, "html.parser" )
+iframe = soup.find( "div", {"class": "external parbase section"} ).find( "iframe" )
+iframe_src = iframe.attrs["src"]
+db_source = urllib3.util.parse_url( iframe_src ).path
 
-#assert request.status == 200, f"Request was unsuccessful. Status {request.status} returned."
-request = run( "curl -A 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/105.0.0.0 Safari/537.36'  https://www.sandiegocounty.gov/content/sdc/hhsa/programs/phs/community_epidemiology/dc/human-monkeypox/localcases.html", shell=True, capture_output=True, text=True )
-parsed_data = html.fromstring( request.stdout )
-
-cases = parsed_data.xpath('//*[@id="content-secondary"]/div[2]/div[7]/table/tbody/tr[2]/td[2]/b')[0].text
-assert cases.isnumeric(), "Parsed string ('{cases}') is not numeric"
-cases = int( cases )
-
-date_str = parsed_data.xpath( '//*[@id="content-secondary"]/div[2]/div[6]' )[0].text_content()
-date = re.search( '\d{1,2}\/\d{1,2}\/\d{4}', date_str )
-assert date is not None, f"No date found in the following string: {date_str}"
-
-date = date.group(0)
-date = datetime.strptime( date, "%m/%d/%Y" )
+ts = TS()
+ts.loads( f"https:{db_source}" )
+dashboard = ts.getWorkbook()
+for i in dashboard.worksheets:
+    if i.name == "Cumulative Cases":
+        cases = int( i.data.values[0][0] )
+    elif i.name == "Text1":
+        date = i.data.iloc[0,0]
+        date = datetime.strptime( date, "%m/%d/%Y" )
 
 case_df = pd.read_csv( "MPX_cases.csv", parse_dates=["date"])
 
