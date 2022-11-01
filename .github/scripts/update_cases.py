@@ -16,11 +16,11 @@ ts = TS()
 ts.loads( f"https:{db_source}" )
 dashboard = ts.getWorkbook()
 for i in dashboard.worksheets:
-    if i.name == 'Daily Update':
+    if i.name == 'Cumulative Cases':
         cases = int( i.data.values[0][0] )
-    elif i.name == "Text1":
+    elif i.name == 'Text2':
         date = i.data.iloc[0,0]
-        date = datetime.strptime( date, "%m/%d/%Y" )
+        date = datetime.strptime( date, "%B %d, %Y" )
 
 case_df = pd.read_csv( "MPX_cases.csv", parse_dates=["date"])
 
