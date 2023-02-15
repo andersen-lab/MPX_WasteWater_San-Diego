@@ -20,7 +20,7 @@ for i in dashboard.worksheets:
         cases = int( i.data.values[0][0] )
     elif i.name == 'Text2':
         date = i.data.iloc[0,0]
-        date = datetime.strptime( date, "%B %d, %Y" )
+        date = datetime.strptime( date, "%m/%d/%Y" )
 
 case_df = pd.read_csv( "MPX_cases.csv", parse_dates=["date"])
 
